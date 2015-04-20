@@ -31,7 +31,6 @@ from .strees import STree, SVisitor, STransformer, is_stree, SVisitor_Recurse, S
 #TODO: find better terms than expand and flatten
 #TODO: Exact recovery of input (as text attr)
 #      Allow to reconstruct the input with whatever changes were made to the tree
-#TODO: Allow 'optimize' mode
 #TODO: Rule Self-recursion (an operator? a 'self' keyword?)
 #TODO: Add token history on parse error
 #TODO: Add rule history on parse error?
@@ -633,6 +632,7 @@ class _Grammar(object):
 
         self.options = dict(options)
         self.debug = bool(options.pop('debug', False))
+        self.optimize = bool(options.pop('optimize', False))
         self.just_lex = bool(options.pop('just_lex', False))
         self.ignore_postproc = bool(options.pop('ignore_postproc', False))
         self.auto_filter_tokens = bool(options.pop('auto_filter_tokens', True))
@@ -682,7 +682,7 @@ class _Grammar(object):
             handler(name, defin)
 
         # -- Build lexer --
-        lexer = lex.lex(module=self._callback, reflags=re.UNICODE)
+        lexer = lex.lex(module=self._callback, reflags=re.UNICODE, optimize=1 if self.optimize else 0)
         lexer = LexerWrapper(lexer, newline_tokens_names=self._newline_tokens, newline_char=self._newline_value, ignore_token_names=self._ignore_tokens)
         if self.lexer_postproc and not self.ignore_postproc:
             lexer = self.lexer_postproc(lexer)  # apply wrapper
@@ -690,7 +690,7 @@ class _Grammar(object):
 
         # -- Build Parser --
         if not self.just_lex:
-            self.parser = yacc.yacc(module=self._callback, debug=self.debug, tabmodule=tab_filename, errorlog=grammar_logger, outputdir=PLYPLUS_DIR)
+            self.parser = yacc.yacc(module=self._callback, debug=self.debug, optimize=1 if self.optimize else 0, tabmodule=tab_filename, errorlog=grammar_logger, outputdir=PLYPLUS_DIR)
 
     def __repr__(self):
         return '<Grammar from %s, tab at %s>' % (self.source_name, self.tab_filename)
