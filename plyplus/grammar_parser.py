@@ -150,7 +150,7 @@ def p_error(p):
 start = "extgrammar"
 
 
-_parser = yacc.yacc(debug=DEBUG, tabmodule=YACC_TAB_MODULE, errorlog=Exception, outputdir=PLYPLUS_DIR)     # Return parser object
+_parser = yacc.yacc(debug=DEBUG, optimize=0 if DEBUG else 1, tabmodule=YACC_TAB_MODULE, errorlog=Exception, outputdir=PLYPLUS_DIR)     # Return parser object
 def parse(text, debug=False):
     lexer.lineno = 1
     return _parser.parse(text, lexer=lexer, debug=debug)
