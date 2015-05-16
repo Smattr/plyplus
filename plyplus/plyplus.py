@@ -768,7 +768,7 @@ class _Grammar(object):
         # token_value = token_value.replace(r'\n', r'\\n')
         # token_value = token_value.replace(r'\r', r'\\r')
         # token_value = token_value.replace(r'\f', r'\\f')
-        # but for speed reasons, I ended-up with this ridiculus regexp:
+        # but for speed reasons, I ended-up with this ridiculous regexp:
         token_value = re.sub(r'(\\[nrf])', r'\\\1', token_value)
 
         return codecs.getdecoder('unicode_escape')(token_value)[0]
