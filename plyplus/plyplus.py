@@ -754,28 +754,9 @@ class _Grammar(object):
 
         return unless_toks_dict, unless_toks_regexps
 
-    def _unescape_unicode_in_token(self, token_value):
-        # XXX HACK XXX
-        # We want to convert unicode escapes into unicode characters,
-        # because the regexp engine only supports the latter.
-        # But decoding with unicode-escape converts whitespace as well,
-        # which is bad because our regexps are whitespace agnostic.
-        # It also unescapes double backslashes, which messes up with the
-        # regexp.
-
-        token_value = token_value.replace('\\'*2, '\\'*4)
-        # The equivalent whitespace escaping is:
-        # token_value = token_value.replace(r'\n', r'\\n')
-        # token_value = token_value.replace(r'\r', r'\\r')
-        # token_value = token_value.replace(r'\f', r'\\f')
-        # but for speed reasons, I ended-up with this ridiculous regexp:
-        token_value = re.sub(r'(\\[nrf])', r'\\\1', token_value)
-
-        return codecs.getdecoder('unicode_escape')(token_value)[0]
-
     def _add_token_with_mods(self, name, defin):
         token_value, token_features = defin
-        token_value = self._unescape_unicode_in_token(token_value)
+        token_value = token_value
 
         token_added = False
         if token_features is None:

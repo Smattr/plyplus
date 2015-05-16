@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import absolute_import
 
 import unittest
@@ -73,11 +75,11 @@ class TestPlyPlus(unittest.TestCase):
         Grammar(uStringIO(u"start: a+ b a+? 'b' a*; b: 'b'; a: 'a';"))
 
     def test_unicode(self):
-        g = Grammar(r"""start: UNIA UNIB UNIA;
-                    UNIA: '\xa3';
-                    UNIB: '\u0101';
+        g = Grammar(u"""start: UNIA UNIB UNIA;
+                    UNIA: '£';
+                    UNIB: 'ā';
                     """)
-        g.parse(u'\xa3\u0101\u00a3')
+        g.parse(u'£ā£')
 
     def test_recurse_expansion(self):
         """Verify that stack depth doesn't get exceeded on recursive rules marked for expansion."""

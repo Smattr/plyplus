@@ -7,6 +7,7 @@ from .test_trees import TestSTrees
 from .test_selectors import TestSelectors
 from .test_parser import TestPlyPlus
 from .test_grammars import TestPythonG, TestConfigG
+from .test_unicode_grammar import TestUnicode
 
 logging.basicConfig(level=logging.INFO)
 
